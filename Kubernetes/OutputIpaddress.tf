@@ -34,5 +34,5 @@ data "oci_load_balancer_load_balancers" "OKE_load_balancers" {
     
 }
 output "LoadBalanacer" {
-  value = data.oci_load_balancer_load_balancers.OKE_load_balancers.load_balancers[0].ip_address_details[0].ip_address
+  value = data.oci_load_balancer_load_balancers.OKE_load_balancers.load_balancers[*].ip_address_details[*].ip_address
 }
