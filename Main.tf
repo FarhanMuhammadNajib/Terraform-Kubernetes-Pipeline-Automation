@@ -28,6 +28,8 @@ provider "oci" {
 }
 
 #All Resource
+
+#Making DockerHub Repo
 module "dockerhub_repository" {
   source = "./Module/Docker"
 
@@ -36,34 +38,7 @@ module "dockerhub_repository" {
   private         = false
 }
 
-module "Github_Setup-WithActionAlso" {
-  source    = "./Module/Github"
-  Git_Token = var.Git_Token
-
-  #Repo Basic Data
-  repository_name = var.Git_Repo_Name
-  branches = [
-    { name = "Dev" }
-  ]
-  #Docker Cardential for GitHub Action YAML
-  DOCKERHUB_USERNAME = var.DOCKERHUB_USERNAME
-  DOCKERHUB_PASSWORD = var.DOCKERHUB_PASSWORD
-  #Docker Setup
-  value_variable_name_docker = var.Docker_Repo_Name
-  #Upload Needed File
-  GithubAction_file                     = "Build_Pipeline.yml"
-  commit_message_GithubAction_Objective = "Building CI/CD pipeline"
-  #Environment Setup
-  Environment_Name = ["Dev", "Prod"]
-  #OCI OKE Atribut
-  OCI_CLI_USER        = var.user_ocid
-  OCI_CLI_TENANCY     = var.tenancy_ocid
-  OCI_CLI_FINGERPRINT = var.fingerprint
-  OCI_CLI_KEY_CONTENT = var.private_key_content
-  OCI_CLI_REGION      = var.region
-  OCI_CLI_COMPARTEMENT= var.compartment_ocid
-}
-
+# Making Kubernetes on OCI using OKE
 module "oci_oke" {
   source                        = "github.com/oracle-quickstart/oci-oke"
   tenancy_ocid                  = var.tenancy_ocid
@@ -77,4 +52,50 @@ module "oci_oke" {
   node_count                    = 1
 }
 
+#Making Github Repo including Github Action Workflows
+module "Github_Setup-WithActionAlso" {
+  source    = "./Module/Github"
+  Git_Token = var.Git_Token
 
+  #Repo Basic Data
+
+  repository_name = var.Git_Repo_Name
+  #Add branches beside "Main"
+  branches = [
+    { name = "Dev" }
+  ]
+
+  #Upload Needed File
+  
+  #Upload Github action file
+  GithubAction_file                     = "Build_Pipeline.yml"
+  commit_message_GithubAction_Objective = "Building CI/CD pipeline"
+  #Upload Docker file
+  Dockerfile= "Dockerfile"
+  #Upload Kubernetes Yaml for Deployment config
+  KubeDeployment_file="Test.yaml"
+
+  #Environment Setup
+  
+  Environment_Name = ["Dev", "Prod"]
+
+  #Input Variable and secret for GithubAction
+  
+  #Docker Setup
+  value_variable_name_docker = var.Docker_Repo_Name  
+  #Docker Cardential for GitHub Action YAML
+  DOCKERHUB_USERNAME = var.DOCKERHUB_USERNAME
+  DOCKERHUB_PASSWORD = var.DOCKERHUB_PASSWORD
+  #OCI OKE Atribut
+  OCI_CLI_USER        = var.user_ocid
+  OCI_CLI_TENANCY     = var.tenancy_ocid
+  OCI_CLI_FINGERPRINT = var.fingerprint
+  OCI_CLI_KEY_CONTENT = var.private_key_content
+  OCI_CLI_REGION      = var.region
+  OCI_CLI_COMPARTEMENT= var.compartment_ocid
+  OKE_CLUSTER_OCID    = module.oci_oke.cluster.id
+  depends_on = [
+    module.dockerhub_repository,
+    module.oci_oke
+  ]
+}

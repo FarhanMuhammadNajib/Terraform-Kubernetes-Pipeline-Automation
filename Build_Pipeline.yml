@@ -33,7 +33,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: farhanmuhammadnajib/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest
 
   DockerForDev:
     if: github.ref == 'refs/heads/Dev'
