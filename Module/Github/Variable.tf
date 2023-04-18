@@ -77,7 +77,7 @@ variable "OCI_CLI_REGION" {
   sensitive = true
 }
 variable "OKE_CLUSTER_OCID" {
-  type = string
+  type      = string
   sensitive = true
 }
 
