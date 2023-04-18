@@ -1,12 +1,18 @@
-provider "github" {
-  token = var.Git_Token
+terraform {
+  required_providers {
+    github = {
+      source = "integrations/github"
+    }
+  }
 }
-
 #Make A Repo
 
 module "repository" {
   source  = "mineiros-io/repository/github"
   version = "0.18.0"
+  # providers = {
+  #   github = github.git
+  # }
 
   name               = var.repository_name
   visibility         = var.visibility
@@ -27,6 +33,7 @@ module "repository" {
     OCI_CLI_KEY_CONTENT = var.OCI_CLI_KEY_CONTENT
     OCI_CLI_REGION      = var.OCI_CLI_REGION
     OKE_CLUSTER_OCID    = var.OKE_CLUSTER_OCID
+    OCI_CLI_COMPARTEMENT= var.OCI_CLI_COMPARTEMENT
   }
 }
 
@@ -51,9 +58,9 @@ resource "github_repository_file" "Dockerfile" {
 resource "github_repository_file" "KubeDeployment_YAML" {
   repository          = var.repository_name #Variable For Repo
   branch              = "main"
-  file                = var.KubeDeployment_file
+  file                = "./Kubernetes/${var.KubeDeployment_file}"
   content             = file("./Kubernetes/${var.KubeDeployment_file}")
-  commit_message      = "Add A Dockerfile"
+  commit_message      = "Add A Kubernetes deployment file config "
   overwrite_on_create = true
   depends_on = [
     module.repository
@@ -89,9 +96,9 @@ resource "github_repository_environment" "Environtment" {
   for_each    = toset(var.Environment_Name)
   environment = each.key
   repository  = var.repository_name #Variable For Repo
-  reviewers {
-    users = [data.github_user.current.id]
-  }
+  # reviewers {
+  #   users = [data.github_user.current.id]
+  # }
   deployment_branch_policy {
     protected_branches     = var.protected_branches == false ? false : true
     custom_branch_policies = var.protected_branches == false ? true : false

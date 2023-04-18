@@ -14,6 +14,7 @@ terraform {
 #Provider setting
 provider "github" {
   token = var.Git_Token
+  alias = "git"
 }
 provider "dockerhub" {
   username = var.DOCKERHUB_USERNAME
@@ -55,7 +56,9 @@ module "oci_oke" {
 #Making Github Repo including Github Action Workflows
 module "Github_Setup-WithActionAlso" {
   source    = "./Module/Github"
-  Git_Token = var.Git_Token
+  providers = {
+    github = github.git
+  }
 
   #Repo Basic Data
 

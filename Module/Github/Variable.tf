@@ -1,8 +1,8 @@
 #Variable For Provider
-variable "Git_Token" {
-  type      = string
-  sensitive = true
-}
+# variable "Git_Token" {
+#   type      = string
+#   sensitive = true
+# }
 
 #Variable For Repo
 
@@ -80,7 +80,10 @@ variable "OKE_CLUSTER_OCID" {
   type      = string
   sensitive = true
 }
-
+variable "OCI_CLI_COMPARTEMENT" {
+  type = string
+  sensitive = true
+}
 #Variable For Upload File
 variable "Dockerfile" {
   description = "A Name For A Dockerfile"

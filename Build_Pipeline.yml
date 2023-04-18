@@ -85,6 +85,9 @@ jobs:
           cluster: ${{ secrets.OKE_CLUSTER_OCID }}
       - name: Deploy App
         run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=prod && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
+      - name: wait for 60 seconds For load balancer to active
+        run: sleep 60s
+        shell: bash      
       - name: Check pod and service
         run: kubectl get pods && kubectl get service 
   DeployOKEDev:
@@ -114,5 +117,8 @@ jobs:
           cluster: ${{ secrets.OKE_CLUSTER_OCID }}
       - name: Deploy App
         run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=dev && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
+      - name: wait for 60 seconds For load balancer to active
+        run: sleep 60s
+        shell: bash
       - name: Check pod and service
         run: kubectl get pods && kubectl get service
