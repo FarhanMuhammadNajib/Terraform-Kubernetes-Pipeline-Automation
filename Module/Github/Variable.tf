@@ -76,6 +76,10 @@ variable "OCI_CLI_REGION" {
   type      = string
   sensitive = true
 }
+variable "OKE_CLUSTER_OCID" {
+  type = string
+  sensitive = true
+}
 
 #Variable For Upload File
 variable "Dockerfile" {
