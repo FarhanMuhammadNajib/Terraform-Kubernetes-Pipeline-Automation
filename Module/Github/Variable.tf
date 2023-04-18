@@ -84,6 +84,11 @@ variable "Dockerfile" {
   default     = "Dockerfile"
 }
 
+variable "KubeDeployment_file" {
+  description = "A Name For Kubernetes Yaml deployment config file"
+  type        = string
+}
+
 variable "GithubAction_file" {
   description = "A Name For A Github Action File With YAML Format"
   type        = string

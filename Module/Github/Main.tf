@@ -45,6 +45,20 @@ resource "github_repository_file" "Dockerfile" {
   ]
 }
 
+#Kubernetes Deployment File
+
+resource "github_repository_file" "KubeDeployment_YAML" {
+  repository          = var.repository_name #Variable For Repo
+  branch              = "main"
+  file                = var.KubeDeployment_file
+  content             = file("./Kubernetes/${var.KubeDeployment_file}")
+  commit_message      = "Add A Dockerfile"
+  overwrite_on_create = true
+  depends_on = [
+    module.repository
+  ]
+}
+
 #Github Action File
 
 resource "github_repository_file" "GitHub_action_YAML" {
