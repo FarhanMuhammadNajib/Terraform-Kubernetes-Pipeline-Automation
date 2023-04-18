@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+   name: hbd
+   labels:
+     name: hbd
+spec:
+   containers:
+   - name : nginx
+     image: $img
+     ports:
+     - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hbd-app
+spec:
+  selector:
+    name: hbd
+  ports:
+    - port: 80
+  type: LoadBalancer

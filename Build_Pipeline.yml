@@ -1,0 +1,118 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+    - 'main'
+    - 'Dev'
+  pull_request: 
+    branches: 
+    - 'main'
+    - 'Dev'
+  workflow_dispatch:
+
+jobs:
+  DockerForProd:
+    if: github.ref == 'refs/heads/main'
+    name: Docker Build and Push For Prod Environment
+    environment: "Prod"
+    runs-on: Ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: farhanmuhammadnajib/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest
+
+  DockerForDev:
+    if: github.ref == 'refs/heads/Dev'
+    name: Docker Build and Push For Dev Environment
+    environment: "Dev"
+    runs-on: Ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build and push image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest
+
+  DeployOKEProd:
+    if: github.ref == 'refs/heads/main'
+    name: Deploy with Kubectl for OKE Prod Environtmen  
+    needs: DockerForProd
+    environment: "Prod"
+    runs-on: ubuntu-latest
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install dependencies for env purpose(envsubset)
+        run: sudo apt-get install gettext-base -y
+      - name: Configure Kubectl
+        uses: oracle-actions/configure-kubectl-oke@v1.3.1
+        id: test-configure-kubectl-oke-action
+        with:
+          cluster: ${{ secrets.OKE_CLUSTER_OCID }}
+      - name: Deploy App
+        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
+      - name: Check pod and service
+        run: kubectl get pods && kubectl get service && kubectl describe pod hbd
+  DeployOKEDev:
+    if: github.ref == 'refs/heads/Dev'
+    name: Deploy with Kubectl for OKE Dev Environtmen  
+    needs: DockerForDev
+    environment: "Dev"
+    runs-on: ubuntu-latest
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Install dependencies for env purpose(envsubset)
+        run: sudo apt-get install gettext-base -y
+      - name: Configure Kubectl
+        uses: oracle-actions/configure-kubectl-oke@v1.3.1
+        id: test-configure-kubectl-oke-action
+        with:
+          cluster: ${{ secrets.OKE_CLUSTER_OCID }}
+      - name: Deploy App
+        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest &&  envsubst < Kubernetes/Test.yaml | kubectl apply -f -
+      - name: Check pod and service
+        run: kubectl get pods && kubectl get service && kubectl describe pod hbd
