@@ -84,9 +84,9 @@ jobs:
         with:
           cluster: ${{ secrets.OKE_CLUSTER_OCID }}
       - name: Deploy App
-        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
+        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=prod && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
       - name: Check pod and service
-        run: kubectl get pods && kubectl get service && kubectl describe pod hbd
+        run: kubectl get pods && kubectl get service 
   DeployOKEDev:
     if: github.ref == 'refs/heads/Dev'
     name: Deploy with Kubectl for OKE Dev Environtmen  
@@ -113,6 +113,6 @@ jobs:
         with:
           cluster: ${{ secrets.OKE_CLUSTER_OCID }}
       - name: Deploy App
-        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest &&  envsubst < Kubernetes/Test.yaml | kubectl apply -f -
+        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=dev && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
       - name: Check pod and service
-        run: kubectl get pods && kubectl get service && kubectl describe pod hbd
+        run: kubectl get pods && kubectl get service
