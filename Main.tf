@@ -55,7 +55,7 @@ module "oci_oke" {
 
 #Making Github Repo including Github Action Workflows
 module "Github_Setup-WithActionAlso" {
-  source    = "./Module/Github"
+  source = "./Module/Github"
   providers = {
     github = github.git
   }
