@@ -1,12 +1,15 @@
 #Pull Image Nginx
-FROM nginx:latest
+FROM python:3.8
+#make Dir
+RUN mkdir App
 #set Working dir
-WORKDIR /usr/share/nginx
+WORKDIR /App
 #Instal dependencies
 RUN apt-get update -y
-RUN apt-get install git -y
-#Clone Repo
-RUN git clone https://github.com/faahim/happy-birthday.git
-#Change Content App
-RUN mv html html2
-RUN mv happy-birthday html
+RUN pip install tensorflow && pip install joblib && pip install flask && pip install Pillow
+#Copy dependencies file
+COPY ./APP .
+#Running Prerequisite
+RUN python BuildModel.py
+#CMD runinning
+CMD python app.py

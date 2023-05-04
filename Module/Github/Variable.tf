@@ -118,7 +118,7 @@ variable "protected_branches" {
   default = false
 }
 
-#Variable For Environment
+#Variable For Environment Variable
 
 variable "variable_name_docker" {
   type    = string

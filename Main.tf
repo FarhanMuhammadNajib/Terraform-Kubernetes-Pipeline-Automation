@@ -82,7 +82,7 @@ module "Github_Setup-WithActionAlso" {
 
   Environment_Name = ["Dev", "Prod"]
 
-  #Input Variable and secret for GithubAction
+  #GithubAction Variable and secret setup
 
   #Docker Setup
   value_variable_name_docker = var.Docker_Repo_Name

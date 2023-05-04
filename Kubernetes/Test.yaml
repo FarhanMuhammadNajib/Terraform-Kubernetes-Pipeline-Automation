@@ -6,10 +6,10 @@ metadata:
      name: app-$env
 spec:
    containers:
-   - name : nginx-$env
+   - name : app-$env
      image: $img
      ports:
-     - containerPort: 80
+     - containerPort: 5000
 ---
 apiVersion: v1
 kind: Service
@@ -19,5 +19,5 @@ spec:
   selector:
     name: app-$env
   ports:
-    - port: 80
+    - port: 5000
   type: LoadBalancer
