@@ -49,7 +49,7 @@ variable "fingerprint" {
 #Kubernetes Option
 variable "k8s_version" {
   type    = string
-  default = "v1.25.4"
+  default = "v1.26.2"
 }
 variable "oke_cluster_name" {
   type = string

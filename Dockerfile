@@ -11,5 +11,7 @@ RUN pip install tensorflow && pip install joblib && pip install flask && pip ins
 COPY ./APP .
 #Running Prerequisite
 RUN python BuildModel.py
+# Expose the Docker container for the application to run on port 5000
+EXPOSE 5000
 #CMD runinning
 CMD python app.py
