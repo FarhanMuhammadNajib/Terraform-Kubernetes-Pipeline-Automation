@@ -41,7 +41,7 @@ module "dockerhub_repository" {
 
 # Making Kubernetes on OCI using OKE
 module "oci_oke" {
-#  source                        = "github.com/oracle-quickstart/oci-oke"
+  #  source                        = "github.com/oracle-quickstart/oci-oke"
   source                        = "./Module/OKE"
   tenancy_ocid                  = var.tenancy_ocid
   compartment_ocid              = var.compartment_ocid

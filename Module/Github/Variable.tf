@@ -81,7 +81,7 @@ variable "OKE_CLUSTER_OCID" {
   sensitive = true
 }
 variable "OCI_CLI_COMPARTEMENT" {
-  type = string
+  type      = string
   sensitive = true
 }
 #Variable For Upload File
