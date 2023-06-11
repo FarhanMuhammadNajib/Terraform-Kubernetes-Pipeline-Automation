@@ -59,5 +59,5 @@ variable "oke_cluster_name" {
 
 variable "public_ip_lifetime" {
   type = string
-  default = "Never"
+  default = "RESERVED"
 }
