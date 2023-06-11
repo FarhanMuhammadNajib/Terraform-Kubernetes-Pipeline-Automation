@@ -53,7 +53,12 @@ module "oci_oke" {
   k8s_version                   = var.k8s_version
   node_count                    = 1
 }
+resource "oci_core_public_ip" "test_public_ip" {
+    #Required
+    compartment_id = var.compartment_ocid
+    lifetime = var.public_ip_lifetime
 
+}
 #Making Github Repo including Github Action Workflows
 module "Github_Setup-WithActionAlso" {
   source = "./Module/Github"

@@ -19,7 +19,7 @@ variable "Docker_Repo_Name" {
   type = string
 }
 
-#variable For Kubernetes
+#variable For Kubernetes and oci
 #Auth Data
 variable "tenancy_ocid" {
   type = string
@@ -53,4 +53,11 @@ variable "k8s_version" {
 }
 variable "oke_cluster_name" {
   type = string
+}
+
+#For Reserved Public IP
+
+variable "public_ip_lifetime" {
+  type = string
+  default = "Never"
 }
