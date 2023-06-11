@@ -53,7 +53,7 @@ module "oci_oke" {
   k8s_version                   = var.k8s_version
   node_count                    = 1
 }
-resource "oci_core_public_ip" "test_public_ip" {
+resource "oci_core_public_ip" "Reserved_public_ip" {
     #Required
     compartment_id = var.compartment_ocid
     lifetime = var.public_ip_lifetime
@@ -103,8 +103,10 @@ module "Github_Setup-WithActionAlso" {
   OCI_CLI_REGION       = var.region
   OCI_CLI_COMPARTEMENT = var.compartment_ocid
   OKE_CLUSTER_OCID     = module.oci_oke.cluster.id
+  PublicIp             = resource.oci_core_public_ip.Reserved_public_ip.ip_address
   depends_on = [
     module.dockerhub_repository,
-    module.oci_oke
+    module.oci_oke,
+    resource.oci_core_public_ip.Reserved_public_ip
   ]
 }

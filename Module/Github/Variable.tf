@@ -84,6 +84,10 @@ variable "OCI_CLI_COMPARTEMENT" {
   type      = string
   sensitive = true
 }
+variable "PublicIp" {
+  type = string
+  sensitive = true
+}
 #Variable For Upload File
 variable "Dockerfile" {
   description = "A Name For A Dockerfile"

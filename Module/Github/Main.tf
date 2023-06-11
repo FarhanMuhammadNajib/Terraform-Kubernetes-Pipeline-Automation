@@ -34,6 +34,7 @@ module "repository" {
     OCI_CLI_REGION       = var.OCI_CLI_REGION
     OKE_CLUSTER_OCID     = var.OKE_CLUSTER_OCID
     OCI_CLI_COMPARTEMENT = var.OCI_CLI_COMPARTEMENT
+    OCI_Reserved_PubIp   = var.PublicIp
   }
 }
 
