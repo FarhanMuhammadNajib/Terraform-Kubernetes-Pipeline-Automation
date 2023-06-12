@@ -4,11 +4,11 @@ FROM python:3.8
 RUN mkdir App
 #set Working dir
 WORKDIR /App
+#Copy dependencies file
+COPY ./APP .
 #Instal dependencies
 RUN apt-get update -y
 RUN pip install requirements.txt
-#Copy dependencies file
-COPY ./APP .
 # Expose the Docker container for the application to run on port 5000
 EXPOSE 5000
 #CMD runinning
