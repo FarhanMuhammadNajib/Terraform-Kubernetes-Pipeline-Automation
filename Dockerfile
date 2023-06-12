@@ -6,11 +6,9 @@ RUN mkdir App
 WORKDIR /App
 #Instal dependencies
 RUN apt-get update -y
-RUN pip install tensorflow && pip install joblib && pip install flask && pip install Pillow
+RUN pip install requirements.txt
 #Copy dependencies file
 COPY ./APP .
-#Running Prerequisite
-RUN python BuildModel.py
 # Expose the Docker container for the application to run on port 5000
 EXPOSE 5000
 #CMD runinning
