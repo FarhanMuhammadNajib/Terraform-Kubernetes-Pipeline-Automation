@@ -10,7 +10,7 @@ resource "oci_containerengine_cluster" "oci_oke_cluster" {
   kubernetes_version = var.k8s_version
   name               = var.oke_cluster_name
   vcn_id             = var.use_existing_vcn ? var.vcn_id : oci_core_vcn.oke_vcn[0].id
-
+  type               = "ENHANCED_CLUSTER"
   dynamic "endpoint_config" {
     for_each = var.vcn_native ? [1] : []
     content {

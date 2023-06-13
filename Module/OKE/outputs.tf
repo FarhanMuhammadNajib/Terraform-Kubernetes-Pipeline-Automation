@@ -28,3 +28,11 @@ output "KubeConfig" {
   value = data.oci_containerengine_cluster_kube_config.KubeConfig.content
 }
 
+output "VCN" {
+  value ={
+    id = oci_core_vcn.oke_vcn[0].id
+    endpoint_subnet_id = oci_core_subnet.oke_api_endpoint_subnet[0].id
+    lb_subnet_id       = oci_core_subnet.oke_lb_subnet[0].id
+    nodepool_subnet_id = oci_core_subnet.oke_nodepool_subnet[0].id
+  }
+}

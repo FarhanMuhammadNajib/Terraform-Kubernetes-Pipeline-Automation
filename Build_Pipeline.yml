@@ -84,13 +84,10 @@ jobs:
         with:
           cluster: ${{ secrets.OKE_CLUSTER_OCID }}
       - name: Check if App already made
-        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=dev && export ip=${{secrets.OCI_Reserved_PubIp}} && envsubst < Kubernetes/Test.yaml | kubectl delete -f -
+        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=prod && export ip=${{secrets.OCI_Reserved_PubIp}} && envsubst < Kubernetes/Test.yaml | kubectl delete -f -
         continue-on-error: true
       - name: Deploy App
-        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=prod && export ip=${{secrets.OCI_Reserved_PubIp}} && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
-      - name: wait for 60 seconds For load balancer to active
-        run: sleep 60s
-        shell: bash      
+        run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=prod && export ip=${{secrets.OCI_Reserved_PubIp}} && envsubst < Kubernetes/Test.yaml | kubectl apply -f -    
       - name: Check pod and service
         run: kubectl get pods && kubectl get service 
   DeployOKEDev:
@@ -123,8 +120,5 @@ jobs:
         continue-on-error: true
       - name: Deploy App
         run: export img=${{ secrets.DOCKERHUB_USERNAME }}/${{vars.Docker_Repo}}:${{vars.Docker_Tags}}-Latest && export env=dev && export ip=${{secrets.OCI_Reserved_PubIp}} && envsubst < Kubernetes/Test.yaml | kubectl apply -f -
-      - name: wait for 60 seconds For load balancer to active
-        run: sleep 60s
-        shell: bash
       - name: Check pod and service
         run: kubectl get pods && kubectl get service

@@ -53,6 +53,7 @@ module "oci_oke" {
   k8s_version                   = var.k8s_version
   node_count                    = 1
 }
+#Make Reserved Ip
 resource "oci_core_public_ip" "Reserved_public_ip" {
     #Required
     compartment_id = var.compartment_ocid
