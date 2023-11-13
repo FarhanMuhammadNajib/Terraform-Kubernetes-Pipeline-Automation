@@ -19,6 +19,7 @@ To run these Terraform files, you need the following things:
 Set-Item -Path env:TF_VAR_DOCKERHUB_USERNAME -Value "UrValue"
 ```
 Terraform will automatically read the environment variables and use their values for the corresponding variables. For more information, you can refer to the [Environment Variables | Terraform | HashiCorp Developer page](https://www.terraform.io/cli/config/environment-variables).
+
 4. Run the command `terraform init` to initialize Terraform and download the required plugins
 5. Run the command `terraform plan` to see the plan for creating the pipeline architecture that will be done by Terraform
 6. Run the command `terraform apply` to apply the plan and create the pipeline architecture automatically. You will be asked to type `yes` to confirm
